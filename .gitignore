@@ -1,0 +1,14 @@
+*.[oa]
+*.in
+*.log
+*.exe
+*.dll
+*.pdb
+*.xml
+*.cache
+*.txt
+*/obj/*
+*/Properties/*
+*.config
+*.mdf
+*.ldf
