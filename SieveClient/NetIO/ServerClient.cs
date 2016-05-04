@@ -18,6 +18,7 @@ namespace NetIO
         private byte _head;                                             // 封包头部字节
         private byte _tail;                                             // 封包尾部字节
         private Dictionary<int/*protocol id*/, Protocol> _protocols;    // 协议map
+        private object _userdata;                                        // userdata
 
         public ServerClient(byte head, byte tail)
         {
@@ -29,6 +30,16 @@ namespace NetIO
             _packet_handler.SetUserData(this);
             _packet_handler.FullPacketEvent += OnGetFullPacket;
             _protocols = new Dictionary<int, Protocol>();
+        }
+
+        public void SetUserData(object userdata)
+        {
+            this._userdata = userdata;
+        }
+
+        public object GetUserData()
+        {
+            return this._userdata;
         }
 
         public bool Connect(string host, short port)
