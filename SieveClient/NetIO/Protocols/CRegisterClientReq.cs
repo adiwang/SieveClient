@@ -9,7 +9,7 @@ namespace NetIO
 {
     class CRegisterClientReq : Protocol
     {
-        public const int ProtocoID = Convert.ToInt32(ProtocolID.PROTOCOL_ID_CREGISTERCLIENTREQ);
+        public const int ProtocoID = (int)ProtocolID.PROTOCOL_ID_CREGISTERCLIENTREQ;
 
         public UInt32 seq;
         public byte[] marshalData;

@@ -7,19 +7,19 @@ using System.Threading.Tasks;
 
 namespace NetIO
 {
-    class SRegisterClientRep : Protocol
+    class SEndBatchProcessRep : Protocol
     {
-        public const int ProtocoID = (int)ProtocolID.PROTOCOL_ID_SREGISTERCLIENTREP;
+        public const int ProtocoID = (int)ProtocolID.PROTOCOL_ID_SENDBATCHPROCESSREP;
 
         public UInt32 result;
         public byte[] marshalData;
 
-        public SRegisterClientRep()
+        public SEndBatchProcessRep()
         {
-            result = 0;
+            this.result = 0;
         }
 
-        public SRegisterClientRep(UInt32 result)
+        public SEndBatchProcessRep(UInt32 result)
         {
             this.result = result;
         }
@@ -27,15 +27,15 @@ namespace NetIO
         public override void Process(byte[] data, int len, object userdata)
         {
             UnMarshal(data);
-            //TODO: 注册成功逻辑
+            //TODO:
         }
 
         public void Marshal()
         {
-            netmessage.SRegisterClientRepProto proto = new netmessage.SRegisterClientRepProto();
+            netmessage.SEndBatchProcessRepProto proto = new netmessage.SEndBatchProcessRepProto();
             proto.result = this.result;
             MemoryStream ms = new MemoryStream();
-            ProtoBuf.Serializer.Serialize<netmessage.SRegisterClientRepProto>(ms, proto);
+            ProtoBuf.Serializer.Serialize<netmessage.SEndBatchProcessRepProto>(ms, proto);
             netmessage.CProto cproto = new netmessage.CProto();
             cproto.id = ProtocoID;
             cproto.body = System.Text.Encoding.Default.GetString(ms.ToArray());
@@ -54,16 +54,16 @@ namespace NetIO
 
         public void UnMarshal(byte[] data)
         {
-            netmessage.SRegisterClientRepProto proto = new netmessage.SRegisterClientRepProto();
+            netmessage.SEndBatchProcessRepProto proto = new netmessage.SEndBatchProcessRepProto();
             MemoryStream ms = new MemoryStream(data);
-            proto = ProtoBuf.Serializer.Deserialize<netmessage.SRegisterClientRepProto>(ms);
+            proto = ProtoBuf.Serializer.Deserialize<netmessage.SEndBatchProcessRepProto>(ms);
             ms.Close();
             this.result = proto.result;
         }
 
         public override Protocol Clone()
         {
-            return new SRegisterClientRep();
+            return new SEndBatchProcessRep();
         }
     }
 }

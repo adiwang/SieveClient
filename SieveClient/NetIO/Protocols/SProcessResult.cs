@@ -9,7 +9,7 @@ namespace NetIO
 {
     class SProcessResult : Protocol
     {
-        public const int ProtocoID = Convert.ToInt32(ProtocolID.PROTOCOL_ID_SPROCESSFEATUREREP);
+        public const int ProtocoID = (int)ProtocolID.PROTOCOL_ID_SPROCESSFEATUREREP;
 
         public UInt32 result;
         public byte[] marshalData;

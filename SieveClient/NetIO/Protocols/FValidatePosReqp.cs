@@ -9,7 +9,7 @@ namespace NetIO
 {
     class FValidatePosReqp : Protocol
     {
-        public const int ProtocoID = Convert.ToInt32(ProtocolID.PROTOCOL_ID_FVALIDATEPOSREQP);
+        public const int ProtocoID = (int)ProtocolID.PROTOCOL_ID_FVALIDATEPOSREQP;
 
         public UInt32 result;
         public string image_path;
