@@ -10,13 +10,13 @@ namespace NetIO
 {
     // 一个数据包的内存结构
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct NetPacket
+    public class NetPacket
     {
         public Int32 version;               // 封包的版本号                                   :0-3
         public byte head;                   // 包头                                           :4
         public byte tail;                   // 包尾                                           :5
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 16, ArraySubType = UnmanagedType.U1)]
-        public byte[] check;                // data部分的校验值-16字节md5                      :6-21
+        public byte[] check = new byte[16]; // data部分的校验值-16字节md5                      :6-21
         public Int32 type;                  // 包数据的类型                                    :22-25
         public Int32 datalen;               // 包数据的内容长度，不包括此包结构和包头尾          :26-29
         public Int32 reserve;               // 保留字段，暂不使用                              :30-33
@@ -112,7 +112,8 @@ namespace NetIO
             }
             package.head = byteData[idx + 4];
             package.tail = byteData[idx + 5];
-            Array.Copy(byteData, 6, package.check, 0, 16);
+            Array.Copy(byteData, idx + 6, package.check, 0, 16);
+
             if (!ByteToInt32(byteData, idx + 22, ref package.type))
             {
                 return false;

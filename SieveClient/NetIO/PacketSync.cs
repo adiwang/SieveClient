@@ -43,7 +43,6 @@ namespace NetIO
             _thread_packetdata = new List<byte>();
             _true_packet_len = 0;
             _packet = new NetPacket();
-            _packet.check = new byte[16];
         }
 
         public void SetUserData(object userdata)
