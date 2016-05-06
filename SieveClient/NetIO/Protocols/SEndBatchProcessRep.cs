@@ -27,7 +27,8 @@ namespace NetIO
         public override void Process(byte[] data, int len, object userdata)
         {
             UnMarshal(data);
-            //TODO:
+            ServerClient client = (ServerClient)userdata;
+            client.OnSEndBatchProcessRep(result);
         }
 
         public void Marshal()

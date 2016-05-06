@@ -27,7 +27,9 @@ namespace NetIO
         public override void Process(byte[] data, int len, object userdata)
         {
             UnMarshal(data);
-            //TODO: 注册成功逻辑
+            ServerClient client = (ServerClient)userdata;
+            //TODO: 修改协议，替换为真正的字段
+            client.OnSProcessResult(result, 1, 1);
         }
 
         public void Marshal()

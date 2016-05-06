@@ -8,6 +8,12 @@ using System.Threading.Tasks;
 
 namespace NetIO
 {
+    public delegate void FValidatePosReqpEventHandler(UInt32 result, string image_path);
+    public delegate void SProcessResultEventHandler(UInt32 result, int group, int rank);
+    public delegate void SEndBatchProcessRepEventHandler(UInt32 result);
+    public delegate void SRegisterClientRepEventHandler(UInt32 result);
+    public delegate void SSetProcessStateRepEventHandler(UInt32 result);
+
     public class ServerClient
     {
         private const int BufferSize = 8192;                            // 缓冲区大小
@@ -18,7 +24,113 @@ namespace NetIO
         private byte _head;                                             // 封包头部字节
         private byte _tail;                                             // 封包尾部字节
         private Dictionary<int/*protocol id*/, Protocol> _protocols;    // 协议map
-        private object _userdata;                                        // userdata
+        private object _userdata;                                       // userdata
+        // 协议响应事件，为了通知客户端
+        public event FValidatePosReqpEventHandler _fValidatePosReqp;
+        public event SProcessResultEventHandler _sProcessResult;
+        public event SEndBatchProcessRepEventHandler _sEndBatchProcessRep;
+        public event SRegisterClientRepEventHandler _sRegisterClientRep;
+        public event SSetProcessStateRepEventHandler _sSetProcessStateRep;
+
+        public void OnFValidatePosReqp(UInt32 result, string image_path)
+        {
+            if (_fValidatePosReqp != null)
+            {
+                _fValidatePosReqp(result, image_path);
+            }
+        }
+
+        public void OnSProcessResult(UInt32 result, int group, int rank)
+        {
+            if (_sProcessResult != null)
+            {
+                _sProcessResult(result, group, rank);
+            }
+        }
+
+        public void OnSEndBatchProcessRep(UInt32 result)
+        {
+            if (_sEndBatchProcessRep != null)
+            {
+                _sEndBatchProcessRep(result);
+            }
+        }
+
+        public void OnSRegisterClientRep(UInt32 result)
+        {
+            if (_sRegisterClientRep != null)
+            {
+                _sRegisterClientRep(result);
+            }
+        }
+
+        public void OnSSetProcessStateRep(UInt32 result)
+        {
+            if (_sSetProcessStateRep != null)
+            {
+                _sSetProcessStateRep(result);
+            }
+        }
+
+        public event FValidatePosReqpEventHandler FValidatePosReqp
+        {
+            add
+            {
+                _fValidatePosReqp += value;
+            }
+            remove
+            {
+                _fValidatePosReqp -= value;
+            }
+        }
+
+        public event SProcessResultEventHandler SProcessResult
+        {
+            add
+            {
+                _sProcessResult += value;
+            }
+            remove
+            {
+                _sProcessResult -= value;
+            }
+        }
+
+        public event SEndBatchProcessRepEventHandler SEndBatchProcessRep
+        {
+            add
+            {
+                _sEndBatchProcessRep += value;
+            }
+            remove
+            {
+                _sEndBatchProcessRep -= value;
+            }
+        }
+
+        public event SRegisterClientRepEventHandler SRegisterClientRep
+        {
+            add
+            {
+                _sRegisterClientRep += value;
+            }
+            remove
+            {
+                _sRegisterClientRep -= value;
+            }
+        }
+
+        public event SSetProcessStateRepEventHandler SSetProcessStateRep
+        {
+            add
+            {
+                _sSetProcessStateRep += value;
+            }
+            remove
+            {
+                _sSetProcessStateRep -= value;
+            }
+        }
 
         public ServerClient(byte head, byte tail)
         {
