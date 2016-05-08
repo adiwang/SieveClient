@@ -286,6 +286,13 @@ namespace netmessage
       get { return _result; }
       set { _result = value; }
     }
+    private int _samples_count;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"samples_count", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int samples_count
+    {
+      get { return _samples_count; }
+      set { _samples_count = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -459,19 +466,19 @@ namespace netmessage
       get { return _result; }
       set { _result = value; }
     }
-    private int _level;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"level", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public int level
+    private int _group;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"group", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int group
     {
-      get { return _level; }
-      set { _level = value; }
+      get { return _group; }
+      set { _group = value; }
     }
-    private byte[] _data;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"data", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public byte[] data
+    private int _rank;
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"rank", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int rank
     {
-      get { return _data; }
-      set { _data = value; }
+      get { return _rank; }
+      set { _rank = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
@@ -529,6 +536,37 @@ namespace netmessage
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"LeafGradeCount")]
+  public partial class LeafGradeCount : global::ProtoBuf.IExtensible
+  {
+    public LeafGradeCount() {}
+    
+    private int _group;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"group", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int group
+    {
+      get { return _group; }
+      set { _group = value; }
+    }
+    private int _rank;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"rank", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int rank
+    {
+      get { return _rank; }
+      set { _rank = value; }
+    }
+    private int _count;
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"count", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int count
+    {
+      get { return _count; }
+      set { _count = value; }
+    }
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"SEndBatchProcessRepProto")]
   public partial class SEndBatchProcessRepProto : global::ProtoBuf.IExtensible
   {
@@ -540,6 +578,68 @@ namespace netmessage
     {
       get { return _result; }
       set { _result = value; }
+    }
+    private readonly global::System.Collections.Generic.List<LeafGradeCount> _leaf_grade_counts = new global::System.Collections.Generic.List<LeafGradeCount>();
+    [global::ProtoBuf.ProtoMember(2, Name=@"leaf_grade_counts", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<LeafGradeCount> leaf_grade_counts
+    {
+      get { return _leaf_grade_counts; }
+    }
+  
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"CLearnSampleReqProto")]
+  public partial class CLearnSampleReqProto : global::ProtoBuf.IExtensible
+  {
+    public CLearnSampleReqProto() {}
+    
+    private int _group;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"group", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int group
+    {
+      get { return _group; }
+      set { _group = value; }
+    }
+    private int _rank;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"rank", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int rank
+    {
+      get { return _rank; }
+      set { _rank = value; }
+    }
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"SLearnSampleRepProto")]
+  public partial class SLearnSampleRepProto : global::ProtoBuf.IExtensible
+  {
+    public SLearnSampleRepProto() {}
+    
+    private uint _result;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"result", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public uint result
+    {
+      get { return _result; }
+      set { _result = value; }
+    }
+    private int _group;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"group", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int group
+    {
+      get { return _group; }
+      set { _group = value; }
+    }
+    private int _rank;
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"rank", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int rank
+    {
+      get { return _rank; }
+      set { _rank = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)

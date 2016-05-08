@@ -28,5 +28,7 @@ namespace NetIO
         PROTOCOL_ID_SSETPROCESSSTATEREP = 18,       // SSetProcessStateRep协议, casd向客户端返回的设置处理状态的响应协议
         PROTOCOL_ID_CENDBATCHPROCESSREQ = 19,       // CEndBatchProcessReq协议, 客户端向casd发送的结束批次处理的协议
         PROTOCOL_ID_SENDBATCHPROCESSREP = 20,       // SEndBatchProcessRep协议, casd向客户端回复得结束批次处理的响应协议
+        PROTOCOL_ID_CLEARNSAMPLEREQ = 21,           // CLearnSampleReq协议, 客户端向casd发送的学习样本的协议
+        PROTOCOL_ID_SLEARNSAMPLEREP = 22,           // SLearnSampleRep协议, casd向客户端回复的学习样本的协议
     }
 }
