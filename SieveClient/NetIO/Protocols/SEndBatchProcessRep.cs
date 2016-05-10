@@ -12,6 +12,7 @@ namespace NetIO
         public const int ProtocoID = (int)ProtocolID.PROTOCOL_ID_SENDBATCHPROCESSREP;
 
         public UInt32 result;
+        public List<netmessage.LeafGradeCount> leaf_grade_counts;
         public byte[] marshalData;
 
         public SEndBatchProcessRep()
@@ -28,13 +29,18 @@ namespace NetIO
         {
             UnMarshal(data);
             ServerClient client = (ServerClient)userdata;
-            client.OnSEndBatchProcessRep(result);
+            client.OnSEndBatchProcessRep(result, leaf_grade_counts);
         }
 
         public void Marshal()
         {
             netmessage.SEndBatchProcessRepProto proto = new netmessage.SEndBatchProcessRepProto();
             proto.result = this.result;
+            proto.leaf_grade_counts.Clear();
+            foreach(netmessage.LeafGradeCount lgc in this.leaf_grade_counts)
+            {
+                proto.leaf_grade_counts.Add(lgc);
+            }
             MemoryStream ms = new MemoryStream();
             ProtoBuf.Serializer.Serialize<netmessage.SEndBatchProcessRepProto>(ms, proto);
             netmessage.CProto cproto = new netmessage.CProto();
@@ -60,6 +66,7 @@ namespace NetIO
             proto = ProtoBuf.Serializer.Deserialize<netmessage.SEndBatchProcessRepProto>(ms);
             ms.Close();
             this.result = proto.result;
+            this.leaf_grade_counts = proto.leaf_grade_counts;
         }
 
         public override Protocol Clone()
