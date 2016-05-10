@@ -38,6 +38,7 @@ namespace SieveClient
             serverClient.AddProtocol((int)NetIO.ProtocolID.PROTOCOL_ID_SPROCESSRESULT, new NetIO.SProcessResult());
             serverClient.AddProtocol((int)NetIO.ProtocolID.PROTOCOL_ID_SREGISTERCLIENTREP, new NetIO.SRegisterClientRep());
             serverClient.AddProtocol((int)NetIO.ProtocolID.PROTOCOL_ID_SSETPROCESSSTATEREP, new NetIO.SSetProcessStateRep());
+            serverClient.AddProtocol((int)NetIO.ProtocolID.PROTOCOL_ID_SLEARNSAMPLEREP, new NetIO.SLearnSampleRep());
 
             // 注册事件响应函数
             serverClient.FValidatePosReqp += new NetIO.FValidatePosReqpEventHandler(OnFValidatePosReqp);
@@ -45,6 +46,7 @@ namespace SieveClient
             serverClient.SProcessResult += new NetIO.SProcessResultEventHandler(OnSProcessResult);
             serverClient.SRegisterClientRep += new NetIO.SRegisterClientRepEventHandler(OnSRegisterClientRep);
             serverClient.SSetProcessStateRep += new NetIO.SSetProcessStateRepEventHandler(OnSSetProcessStateRep);
+            serverClient.SLearnSampleRep += new NetIO.SLearnSampleRepEventHandler(OnSLearnSampleRep);
         }
 
         public PrimaryForm()
@@ -149,9 +151,60 @@ namespace SieveClient
             }
         }
 
-        private void OnSEndBatchProcessRep(UInt32 result)
+        private void OnSEndBatchProcessRep(UInt32 result, List<netmessage.LeafGradeCount> leaf_grade_counts)
         {
-            // TODO:
+            string resStr = "";
+            int totalCount = 0;
+            Dictionary<string, int> grade2count = new Dictionary<string, int>();
+            if (curState == State.ST_CLASS)
+            {
+                panelClassfigy.Visible = false;
+                panelStatistics.Visible = true;
+
+                btnBeginBatchClassify.Enabled = true;
+
+                // 分级的统计报表生成
+                foreach (LeafGrade lg in classifyResults)
+                {
+                    string grade = lg.ToString();
+                    if (grade2count.ContainsKey(grade))
+                    {
+                        grade2count[grade]++;
+                    }
+                    else
+                    {
+                        grade2count.Add(grade, 1);
+                    }
+                }
+                foreach (string grade in grade2count.Keys)
+                {
+                    resStr += string.Format(TextRes.text["StatisticsClassResult"], grade, grade2count[grade], (double)grade2count[grade] / grade2count.Count);
+                }
+                textBoxClassfyGradeCnt.Text = grade2count.Count.ToString();
+                textBoxClassifyStatistics.Text = resStr;
+            }
+            else if (curState == State.ST_LEARN)
+            {
+                panelLearn.Visible = false;
+                panelLearnStatistics.Visible = true;
+
+                btnBeginBatchLearn.Enabled = true;
+
+                // 学习的统计报表生成
+                foreach (netmessage.LeafGradeCount lgc in leaf_grade_counts)
+                {
+                    LeafGrade lg = new LeafGrade(lgc.group, lgc.rank);
+                    grade2count.Add(lg.ToString(), lgc.count);
+                    totalCount += lgc.count;
+                }
+                foreach (KeyValuePair<string, int> kv in grade2count)
+                {
+                    resStr += string.Format(TextRes.text["StatisticsLearnResult"], kv.Key, kv.Value, (double)kv.Value / totalCount);
+                }
+                textBoxLearnTotalCount.Text = totalCount.ToString();
+                textBoxLearnStatistics.Text = resStr;
+            }
+            isInProcess = false;
         }
 
         private void OnSRegisterClientRep(UInt32 result)
@@ -160,6 +213,11 @@ namespace SieveClient
         }
 
         private void OnSSetProcessStateRep(UInt32 result)
+        {
+            // TODO:
+        }
+
+        private void OnSLearnSampleRep(UInt32 result, int group, int rank)
         {
             // TODO:
         }
@@ -213,51 +271,21 @@ namespace SieveClient
             btnBeginBatchClassify.Enabled = false;
             btnClassify.Enabled = true;
             btnEndBatchClassify.Enabled = true;
+            
             labelClassifyState.Text = TextRes.text["WaitSingleClassifyBegin"];
+            textBoxClassfyGradeCnt.Text = "";
+            textBoxClassifyStatistics.Text = "";
+            textBoxClassifyCount.Text = "";
+            textBoxClassfiyResult.Text = ""; 
 
-            NetIO.CSetProcessStateReq req = new NetIO.CSetProcessStateReq();
-            req.state = (int)curState;
-            req.Marshal();
-            serverClient.Send(req.marshalData);
+            SendSetProcessStateProtocol((int)curState);
         }
 
         private void btnEndBatchClassify_Click(object sender, EventArgs e)
         {
-            isInProcess = false;
-
-            panelClassfigy.Visible = false;
-            panelStatistics.Visible = true;
-
-            btnBeginBatchClassify.Enabled = true;
             btnClassify.Enabled = false;
             btnEndBatchClassify.Enabled = false;
-
-            NetIO.CEndBatchProcessReq req = new NetIO.CEndBatchProcessReq();
-            req.state = (int)curState;
-            req.Marshal();
-            serverClient.Send(req.marshalData);
-            
-            // 统计，生成报表
-            string result = "";
-            Dictionary<string, int> grade2count = new Dictionary<string, int>();
-            foreach (LeafGrade lg in classifyResults)
-            {
-                string grade = lg.ToString();
-                if (grade2count.ContainsKey(grade))
-                {
-                    grade2count[grade]++;
-                }
-                else
-                {
-                    grade2count.Add(grade, 1);
-                }
-            }
-            foreach (string grade in grade2count.Keys)
-            {
-                result += string.Format(TextRes.text["StatisticsClassResult"], grade, grade2count[grade], (double)grade2count[grade] / grade2count.Count);
-            }
-            textBoxClassfyGradeCnt.Text = grade2count.Count.ToString();
-            textBoxClassifyStatistics.Text = result;
+            SendEndBatchProcessPotocol((int)curState);
         }
 
         private void btnClassify_Click(object sender, EventArgs e)
@@ -315,64 +343,72 @@ namespace SieveClient
             btnEndBatchLearn.Enabled = true;
 
             labelLearnState.Text = TextRes.text["WaitSingleLearnBegin"];
+            textBoxLearnTotalCount.Text = "";
+            textBoxLearnStatistics.Text = "";
+            textBoxLearnCnt.Text = "";
+            textBoxLearnResult.Text = ""; 
 
-            NetIO.CSetProcessStateReq req = new NetIO.CSetProcessStateReq();
-            req.state = (int)curState;
-            req.Marshal();
-            serverClient.Send(req.marshalData);
+            SendSetProcessStateProtocol((int)curState);
         }
 
         private void btnEndBatchLearn_Click(object sender, EventArgs e)
         {
-            isInProcess = false;
-
-            panelLearn.Visible = false;
-            panelLearnStatistics.Visible = true;
-
-            btnBeginBatchLearn.Enabled = true;
             btnLearn.Enabled = false;
             btnEndBatchLearn.Enabled = false;
-
-            NetIO.CEndBatchProcessReq req = new NetIO.CEndBatchProcessReq();
-            req.state = (int)curState;
-            req.Marshal();
-            serverClient.Send(req.marshalData);
-
-            // TODO: 下面的统计任务需要在SEndBatchProcess中处理
-            // 统计，生成报表
-            /*
-            string result = "";
-            Dictionary<string, int> grade2count = new Dictionary<string, int>();
-            foreach (LeafGrade lg in classifyResults)
-            {
-                string grade = lg.ToString();
-                if (grade2count.ContainsKey(grade))
-                {
-                    grade2count[grade]++;
-                }
-                else
-                {
-                    grade2count.Add(grade, 1);
-                }
-            }
-            foreach (string grade in grade2count.Keys)
-            {
-                result += string.Format(TextRes.text["StatisticsClassResult"], grade, grade2count[grade], (double)grade2count[grade] / grade2count.Count);
-            }
-            textBoxClassfyGradeCnt.Text = grade2count.Count.ToString();
-            textBoxClassifyStatistics.Text = result;
-            */
+            SendEndBatchProcessPotocol((int)curState);
         }
 
         private void btnLearn_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(textBoxLearnCurGrade.Text))
+            {
+                MessageBox.Show(TextRes.text["EmptyLearnGradeErr"]);
+                return;
+            }
+            LeafGrade lg = LeafGrade.BuildLeafGrade(textBoxLearnCurGrade.Text.ToUpper());
+            if (lg == null)
+            {
+                MessageBox.Show(TextRes.text["InvalidLearnGradeErr"]);
+                return;
+            }
+            // 发送学习样本协议
+            NetIO.CLearnSampleReq req = new NetIO.CLearnSampleReq();
             btnLearn.Enabled = false;
             labelClassifyState.Text = TextRes.text["InClassifying"];
+            req.group = lg.group;
+            req.rank = lg.rank;
+            req.Marshal();
+            serverClient.Send(req.marshalData);
 
             // 向控制器发送控制命令，用来触发相机
             byte[] ctrlMsg = new byte[1];
             ctrlMsg[0] = 0x01;
             ctrlClient.Send(ctrlMsg);
+        }
+
+        private void SendSetProcessStateProtocol(int state)
+        {
+            NetIO.CSetProcessStateReq req = new NetIO.CSetProcessStateReq();
+            req.state = state;
+            req.Marshal();
+            serverClient.Send(req.marshalData);
+        }
+
+        private void SendEndBatchProcessPotocol(int state)
+        {
+            NetIO.CEndBatchProcessReq req = new NetIO.CEndBatchProcessReq();
+            req.state = state;
+            req.Marshal();
+            serverClient.Send(req.marshalData);
+        }
+
+        private void tabCtrl_Selecting(object sender, TabControlCancelEventArgs e)
+        {
+            if (isInProcess)
+            {
+                // 正在批次处理中的程序不可更换tab页
+                e.Cancel = true;
+            }
         }
     }
 }

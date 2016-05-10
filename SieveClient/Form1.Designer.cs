@@ -30,6 +30,14 @@
         {
             this.tabCtrl = new System.Windows.Forms.TabControl();
             this.tabPageClassify = new System.Windows.Forms.TabPage();
+            this.panelStatistics = new System.Windows.Forms.Panel();
+            this.textBoxClassfyGradeCnt = new System.Windows.Forms.TextBox();
+            this.labelClassfyGradeCnt = new System.Windows.Forms.Label();
+            this.textBoxClassifyStatistics = new System.Windows.Forms.TextBox();
+            this.panelClassfigy = new System.Windows.Forms.Panel();
+            this.textBoxCurGrade = new System.Windows.Forms.TextBox();
+            this.labelCurGrade = new System.Windows.Forms.Label();
+            this.picBoxClassify = new System.Windows.Forms.PictureBox();
             this.labelClassifyState = new System.Windows.Forms.Label();
             this.panelClassifyResult = new System.Windows.Forms.Panel();
             this.textBoxClassfiyResult = new System.Windows.Forms.TextBox();
@@ -39,41 +47,33 @@
             this.btnEndBatchClassify = new System.Windows.Forms.Button();
             this.btnBeginBatchClassify = new System.Windows.Forms.Button();
             this.tabPageLearn = new System.Windows.Forms.TabPage();
-            this.panelClassfigy = new System.Windows.Forms.Panel();
-            this.textBoxCurGrade = new System.Windows.Forms.TextBox();
-            this.labelCurGrade = new System.Windows.Forms.Label();
-            this.picBoxClassify = new System.Windows.Forms.PictureBox();
-            this.panelStatistics = new System.Windows.Forms.Panel();
-            this.textBoxClassifyStatistics = new System.Windows.Forms.TextBox();
-            this.labelClassfyGradeCnt = new System.Windows.Forms.Label();
-            this.textBoxClassfyGradeCnt = new System.Windows.Forms.TextBox();
-            this.panelLearn = new System.Windows.Forms.Panel();
-            this.btnBeginBatchLearn = new System.Windows.Forms.Button();
-            this.btnLearn = new System.Windows.Forms.Button();
-            this.btnEndBatchLearn = new System.Windows.Forms.Button();
-            this.panelLearnResult = new System.Windows.Forms.Panel();
-            this.labelLearnCurGrade = new System.Windows.Forms.Label();
-            this.textBoxLearnCurGrade = new System.Windows.Forms.TextBox();
-            this.textBoxLearnResult = new System.Windows.Forms.TextBox();
-            this.labelLearnState = new System.Windows.Forms.Label();
-            this.picBoxLearn = new System.Windows.Forms.PictureBox();
             this.panelLearnStatistics = new System.Windows.Forms.Panel();
-            this.labelLearnStatistics = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
             this.textBoxLearnStatistics = new System.Windows.Forms.TextBox();
-            this.labelLearnCnt = new System.Windows.Forms.Label();
+            this.textBoxLearnTotalCount = new System.Windows.Forms.TextBox();
+            this.labelLearnStatistics = new System.Windows.Forms.Label();
+            this.panelLearn = new System.Windows.Forms.Panel();
+            this.picBoxLearn = new System.Windows.Forms.PictureBox();
+            this.labelLearnState = new System.Windows.Forms.Label();
+            this.panelLearnResult = new System.Windows.Forms.Panel();
             this.textBoxLearnCnt = new System.Windows.Forms.TextBox();
+            this.labelLearnCnt = new System.Windows.Forms.Label();
+            this.textBoxLearnResult = new System.Windows.Forms.TextBox();
+            this.textBoxLearnCurGrade = new System.Windows.Forms.TextBox();
+            this.labelLearnCurGrade = new System.Windows.Forms.Label();
+            this.btnEndBatchLearn = new System.Windows.Forms.Button();
+            this.btnLearn = new System.Windows.Forms.Button();
+            this.btnBeginBatchLearn = new System.Windows.Forms.Button();
             this.tabCtrl.SuspendLayout();
             this.tabPageClassify.SuspendLayout();
-            this.panelClassifyResult.SuspendLayout();
-            this.tabPageLearn.SuspendLayout();
+            this.panelStatistics.SuspendLayout();
             this.panelClassfigy.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picBoxClassify)).BeginInit();
-            this.panelStatistics.SuspendLayout();
-            this.panelLearn.SuspendLayout();
-            this.panelLearnResult.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picBoxLearn)).BeginInit();
+            this.panelClassifyResult.SuspendLayout();
+            this.tabPageLearn.SuspendLayout();
             this.panelLearnStatistics.SuspendLayout();
+            this.panelLearn.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picBoxLearn)).BeginInit();
+            this.panelLearnResult.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabCtrl
@@ -87,6 +87,7 @@
             this.tabCtrl.Size = new System.Drawing.Size(727, 415);
             this.tabCtrl.TabIndex = 0;
             this.tabCtrl.SelectedIndexChanged += new System.EventHandler(this.tabCtrl_SelectedIndexChanged);
+            this.tabCtrl.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.tabCtrl_Selecting);
             // 
             // tabPageClassify
             // 
@@ -104,6 +105,75 @@
             this.tabPageClassify.Tag = "Classify";
             this.tabPageClassify.Text = "分级";
             this.tabPageClassify.UseVisualStyleBackColor = true;
+            // 
+            // panelStatistics
+            // 
+            this.panelStatistics.Controls.Add(this.textBoxClassfyGradeCnt);
+            this.panelStatistics.Controls.Add(this.labelClassfyGradeCnt);
+            this.panelStatistics.Controls.Add(this.textBoxClassifyStatistics);
+            this.panelStatistics.Location = new System.Drawing.Point(7, 14);
+            this.panelStatistics.Name = "panelStatistics";
+            this.panelStatistics.Size = new System.Drawing.Size(302, 363);
+            this.panelStatistics.TabIndex = 9;
+            // 
+            // textBoxClassfyGradeCnt
+            // 
+            this.textBoxClassfyGradeCnt.Location = new System.Drawing.Point(170, 24);
+            this.textBoxClassfyGradeCnt.Name = "textBoxClassfyGradeCnt";
+            this.textBoxClassfyGradeCnt.Size = new System.Drawing.Size(53, 21);
+            this.textBoxClassfyGradeCnt.TabIndex = 2;
+            // 
+            // labelClassfyGradeCnt
+            // 
+            this.labelClassfyGradeCnt.AutoSize = true;
+            this.labelClassfyGradeCnt.Location = new System.Drawing.Point(13, 27);
+            this.labelClassfyGradeCnt.Name = "labelClassfyGradeCnt";
+            this.labelClassfyGradeCnt.Size = new System.Drawing.Size(137, 12);
+            this.labelClassfyGradeCnt.TabIndex = 1;
+            this.labelClassfyGradeCnt.Text = "本批检测包含等级数量: ";
+            // 
+            // textBoxClassifyStatistics
+            // 
+            this.textBoxClassifyStatistics.Location = new System.Drawing.Point(3, 71);
+            this.textBoxClassifyStatistics.Multiline = true;
+            this.textBoxClassifyStatistics.Name = "textBoxClassifyStatistics";
+            this.textBoxClassifyStatistics.Size = new System.Drawing.Size(283, 289);
+            this.textBoxClassifyStatistics.TabIndex = 0;
+            // 
+            // panelClassfigy
+            // 
+            this.panelClassfigy.Controls.Add(this.textBoxCurGrade);
+            this.panelClassfigy.Controls.Add(this.labelCurGrade);
+            this.panelClassfigy.Controls.Add(this.picBoxClassify);
+            this.panelClassfigy.Location = new System.Drawing.Point(0, 14);
+            this.panelClassfigy.Name = "panelClassfigy";
+            this.panelClassfigy.Size = new System.Drawing.Size(308, 366);
+            this.panelClassfigy.TabIndex = 8;
+            // 
+            // textBoxCurGrade
+            // 
+            this.textBoxCurGrade.Location = new System.Drawing.Point(98, 331);
+            this.textBoxCurGrade.Name = "textBoxCurGrade";
+            this.textBoxCurGrade.Size = new System.Drawing.Size(191, 21);
+            this.textBoxCurGrade.TabIndex = 5;
+            // 
+            // labelCurGrade
+            // 
+            this.labelCurGrade.AutoSize = true;
+            this.labelCurGrade.Location = new System.Drawing.Point(20, 334);
+            this.labelCurGrade.Name = "labelCurGrade";
+            this.labelCurGrade.Size = new System.Drawing.Size(59, 12);
+            this.labelCurGrade.TabIndex = 4;
+            this.labelCurGrade.Text = "当前级别:";
+            // 
+            // picBoxClassify
+            // 
+            this.picBoxClassify.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.picBoxClassify.Location = new System.Drawing.Point(22, 15);
+            this.picBoxClassify.Name = "picBoxClassify";
+            this.picBoxClassify.Size = new System.Drawing.Size(267, 289);
+            this.picBoxClassify.TabIndex = 3;
+            this.picBoxClassify.TabStop = false;
             // 
             // labelClassifyState
             // 
@@ -195,74 +265,39 @@
             this.tabPageLearn.Text = "学习";
             this.tabPageLearn.UseVisualStyleBackColor = true;
             // 
-            // panelClassfigy
+            // panelLearnStatistics
             // 
-            this.panelClassfigy.Controls.Add(this.textBoxCurGrade);
-            this.panelClassfigy.Controls.Add(this.labelCurGrade);
-            this.panelClassfigy.Controls.Add(this.picBoxClassify);
-            this.panelClassfigy.Location = new System.Drawing.Point(0, 14);
-            this.panelClassfigy.Name = "panelClassfigy";
-            this.panelClassfigy.Size = new System.Drawing.Size(308, 366);
-            this.panelClassfigy.TabIndex = 8;
+            this.panelLearnStatistics.Controls.Add(this.textBoxLearnStatistics);
+            this.panelLearnStatistics.Controls.Add(this.textBoxLearnTotalCount);
+            this.panelLearnStatistics.Controls.Add(this.labelLearnStatistics);
+            this.panelLearnStatistics.Location = new System.Drawing.Point(22, 8);
+            this.panelLearnStatistics.Name = "panelLearnStatistics";
+            this.panelLearnStatistics.Size = new System.Drawing.Size(291, 354);
+            this.panelLearnStatistics.TabIndex = 6;
             // 
-            // textBoxCurGrade
+            // textBoxLearnStatistics
             // 
-            this.textBoxCurGrade.Location = new System.Drawing.Point(98, 331);
-            this.textBoxCurGrade.Name = "textBoxCurGrade";
-            this.textBoxCurGrade.Size = new System.Drawing.Size(191, 21);
-            this.textBoxCurGrade.TabIndex = 5;
+            this.textBoxLearnStatistics.Location = new System.Drawing.Point(17, 41);
+            this.textBoxLearnStatistics.Multiline = true;
+            this.textBoxLearnStatistics.Name = "textBoxLearnStatistics";
+            this.textBoxLearnStatistics.Size = new System.Drawing.Size(252, 294);
+            this.textBoxLearnStatistics.TabIndex = 2;
             // 
-            // labelCurGrade
+            // textBoxLearnTotalCount
             // 
-            this.labelCurGrade.AutoSize = true;
-            this.labelCurGrade.Location = new System.Drawing.Point(20, 334);
-            this.labelCurGrade.Name = "labelCurGrade";
-            this.labelCurGrade.Size = new System.Drawing.Size(59, 12);
-            this.labelCurGrade.TabIndex = 4;
-            this.labelCurGrade.Text = "当前级别:";
+            this.textBoxLearnTotalCount.Location = new System.Drawing.Point(133, 13);
+            this.textBoxLearnTotalCount.Name = "textBoxLearnTotalCount";
+            this.textBoxLearnTotalCount.Size = new System.Drawing.Size(67, 21);
+            this.textBoxLearnTotalCount.TabIndex = 1;
             // 
-            // picBoxClassify
+            // labelLearnStatistics
             // 
-            this.picBoxClassify.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picBoxClassify.Location = new System.Drawing.Point(22, 15);
-            this.picBoxClassify.Name = "picBoxClassify";
-            this.picBoxClassify.Size = new System.Drawing.Size(267, 289);
-            this.picBoxClassify.TabIndex = 3;
-            this.picBoxClassify.TabStop = false;
-            // 
-            // panelStatistics
-            // 
-            this.panelStatistics.Controls.Add(this.textBoxClassfyGradeCnt);
-            this.panelStatistics.Controls.Add(this.labelClassfyGradeCnt);
-            this.panelStatistics.Controls.Add(this.textBoxClassifyStatistics);
-            this.panelStatistics.Location = new System.Drawing.Point(7, 14);
-            this.panelStatistics.Name = "panelStatistics";
-            this.panelStatistics.Size = new System.Drawing.Size(302, 363);
-            this.panelStatistics.TabIndex = 9;
-            // 
-            // textBoxClassifyStatistics
-            // 
-            this.textBoxClassifyStatistics.Location = new System.Drawing.Point(3, 71);
-            this.textBoxClassifyStatistics.Multiline = true;
-            this.textBoxClassifyStatistics.Name = "textBoxClassifyStatistics";
-            this.textBoxClassifyStatistics.Size = new System.Drawing.Size(283, 289);
-            this.textBoxClassifyStatistics.TabIndex = 0;
-            // 
-            // labelClassfyGradeCnt
-            // 
-            this.labelClassfyGradeCnt.AutoSize = true;
-            this.labelClassfyGradeCnt.Location = new System.Drawing.Point(13, 27);
-            this.labelClassfyGradeCnt.Name = "labelClassfyGradeCnt";
-            this.labelClassfyGradeCnt.Size = new System.Drawing.Size(137, 12);
-            this.labelClassfyGradeCnt.TabIndex = 1;
-            this.labelClassfyGradeCnt.Text = "本批检测包含等级数量: ";
-            // 
-            // textBoxClassfyGradeCnt
-            // 
-            this.textBoxClassfyGradeCnt.Location = new System.Drawing.Point(170, 24);
-            this.textBoxClassfyGradeCnt.Name = "textBoxClassfyGradeCnt";
-            this.textBoxClassfyGradeCnt.Size = new System.Drawing.Size(53, 21);
-            this.textBoxClassfyGradeCnt.TabIndex = 2;
+            this.labelLearnStatistics.AutoSize = true;
+            this.labelLearnStatistics.Location = new System.Drawing.Point(15, 16);
+            this.labelLearnStatistics.Name = "labelLearnStatistics";
+            this.labelLearnStatistics.Size = new System.Drawing.Size(107, 12);
+            this.labelLearnStatistics.TabIndex = 0;
+            this.labelLearnStatistics.Text = "总共学习样本数量:";
             // 
             // panelLearn
             // 
@@ -272,35 +307,23 @@
             this.panelLearn.Size = new System.Drawing.Size(291, 353);
             this.panelLearn.TabIndex = 0;
             // 
-            // btnBeginBatchLearn
+            // picBoxLearn
             // 
-            this.btnBeginBatchLearn.Location = new System.Drawing.Point(338, 12);
-            this.btnBeginBatchLearn.Name = "btnBeginBatchLearn";
-            this.btnBeginBatchLearn.Size = new System.Drawing.Size(95, 23);
-            this.btnBeginBatchLearn.TabIndex = 1;
-            this.btnBeginBatchLearn.Text = "开始批次学习";
-            this.btnBeginBatchLearn.UseVisualStyleBackColor = true;
-            this.btnBeginBatchLearn.Click += new System.EventHandler(this.btnBeginBatchLearn_Click);
+            this.picBoxLearn.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.picBoxLearn.Location = new System.Drawing.Point(17, 18);
+            this.picBoxLearn.Name = "picBoxLearn";
+            this.picBoxLearn.Size = new System.Drawing.Size(254, 316);
+            this.picBoxLearn.TabIndex = 0;
+            this.picBoxLearn.TabStop = false;
             // 
-            // btnLearn
+            // labelLearnState
             // 
-            this.btnLearn.Location = new System.Drawing.Point(473, 12);
-            this.btnLearn.Name = "btnLearn";
-            this.btnLearn.Size = new System.Drawing.Size(90, 23);
-            this.btnLearn.TabIndex = 2;
-            this.btnLearn.Text = "单次学习";
-            this.btnLearn.UseVisualStyleBackColor = true;
-            this.btnLearn.Click += new System.EventHandler(this.btnLearn_Click);
-            // 
-            // btnEndBatchLearn
-            // 
-            this.btnEndBatchLearn.Location = new System.Drawing.Point(598, 12);
-            this.btnEndBatchLearn.Name = "btnEndBatchLearn";
-            this.btnEndBatchLearn.Size = new System.Drawing.Size(101, 23);
-            this.btnEndBatchLearn.TabIndex = 3;
-            this.btnEndBatchLearn.Text = "结束批次学习";
-            this.btnEndBatchLearn.UseVisualStyleBackColor = true;
-            this.btnEndBatchLearn.Click += new System.EventHandler(this.btnEndBatchLearn_Click);
+            this.labelLearnState.AutoSize = true;
+            this.labelLearnState.Location = new System.Drawing.Point(359, 354);
+            this.labelLearnState.Name = "labelLearnState";
+            this.labelLearnState.Size = new System.Drawing.Size(53, 12);
+            this.labelLearnState.TabIndex = 5;
+            this.labelLearnState.Text = "当前状态";
             // 
             // panelLearnResult
             // 
@@ -314,81 +337,12 @@
             this.panelLearnResult.Size = new System.Drawing.Size(361, 294);
             this.panelLearnResult.TabIndex = 4;
             // 
-            // labelLearnCurGrade
+            // textBoxLearnCnt
             // 
-            this.labelLearnCurGrade.AutoSize = true;
-            this.labelLearnCurGrade.Location = new System.Drawing.Point(26, 10);
-            this.labelLearnCurGrade.Name = "labelLearnCurGrade";
-            this.labelLearnCurGrade.Size = new System.Drawing.Size(83, 12);
-            this.labelLearnCurGrade.TabIndex = 0;
-            this.labelLearnCurGrade.Text = "当前样本级别:";
-            // 
-            // textBoxLearnCurGrade
-            // 
-            this.textBoxLearnCurGrade.Location = new System.Drawing.Point(175, 4);
-            this.textBoxLearnCurGrade.Name = "textBoxLearnCurGrade";
-            this.textBoxLearnCurGrade.Size = new System.Drawing.Size(100, 21);
-            this.textBoxLearnCurGrade.TabIndex = 1;
-            // 
-            // textBoxLearnResult
-            // 
-            this.textBoxLearnResult.Location = new System.Drawing.Point(21, 71);
-            this.textBoxLearnResult.Multiline = true;
-            this.textBoxLearnResult.Name = "textBoxLearnResult";
-            this.textBoxLearnResult.Size = new System.Drawing.Size(326, 210);
-            this.textBoxLearnResult.TabIndex = 2;
-            // 
-            // labelLearnState
-            // 
-            this.labelLearnState.AutoSize = true;
-            this.labelLearnState.Location = new System.Drawing.Point(359, 354);
-            this.labelLearnState.Name = "labelLearnState";
-            this.labelLearnState.Size = new System.Drawing.Size(53, 12);
-            this.labelLearnState.TabIndex = 5;
-            this.labelLearnState.Text = "当前状态";
-            // 
-            // picBoxLearn
-            // 
-            this.picBoxLearn.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.picBoxLearn.Location = new System.Drawing.Point(17, 18);
-            this.picBoxLearn.Name = "picBoxLearn";
-            this.picBoxLearn.Size = new System.Drawing.Size(254, 316);
-            this.picBoxLearn.TabIndex = 0;
-            this.picBoxLearn.TabStop = false;
-            // 
-            // panelLearnStatistics
-            // 
-            this.panelLearnStatistics.Controls.Add(this.textBoxLearnStatistics);
-            this.panelLearnStatistics.Controls.Add(this.textBox3);
-            this.panelLearnStatistics.Controls.Add(this.labelLearnStatistics);
-            this.panelLearnStatistics.Location = new System.Drawing.Point(22, 8);
-            this.panelLearnStatistics.Name = "panelLearnStatistics";
-            this.panelLearnStatistics.Size = new System.Drawing.Size(291, 354);
-            this.panelLearnStatistics.TabIndex = 6;
-            // 
-            // labelLearnStatistics
-            // 
-            this.labelLearnStatistics.AutoSize = true;
-            this.labelLearnStatistics.Location = new System.Drawing.Point(15, 16);
-            this.labelLearnStatistics.Name = "labelLearnStatistics";
-            this.labelLearnStatistics.Size = new System.Drawing.Size(107, 12);
-            this.labelLearnStatistics.TabIndex = 0;
-            this.labelLearnStatistics.Text = "总共学习样本数量:";
-            // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(133, 13);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(67, 21);
-            this.textBox3.TabIndex = 1;
-            // 
-            // textBoxLearnStatistics
-            // 
-            this.textBoxLearnStatistics.Location = new System.Drawing.Point(17, 41);
-            this.textBoxLearnStatistics.Multiline = true;
-            this.textBoxLearnStatistics.Name = "textBoxLearnStatistics";
-            this.textBoxLearnStatistics.Size = new System.Drawing.Size(252, 294);
-            this.textBoxLearnStatistics.TabIndex = 2;
+            this.textBoxLearnCnt.Location = new System.Drawing.Point(175, 36);
+            this.textBoxLearnCnt.Name = "textBoxLearnCnt";
+            this.textBoxLearnCnt.Size = new System.Drawing.Size(100, 21);
+            this.textBoxLearnCnt.TabIndex = 4;
             // 
             // labelLearnCnt
             // 
@@ -399,12 +353,59 @@
             this.labelLearnCnt.TabIndex = 3;
             this.labelLearnCnt.Text = "本次学习样本数量:";
             // 
-            // textBoxLearnCnt
+            // textBoxLearnResult
             // 
-            this.textBoxLearnCnt.Location = new System.Drawing.Point(175, 36);
-            this.textBoxLearnCnt.Name = "textBoxLearnCnt";
-            this.textBoxLearnCnt.Size = new System.Drawing.Size(100, 21);
-            this.textBoxLearnCnt.TabIndex = 4;
+            this.textBoxLearnResult.Location = new System.Drawing.Point(21, 71);
+            this.textBoxLearnResult.Multiline = true;
+            this.textBoxLearnResult.Name = "textBoxLearnResult";
+            this.textBoxLearnResult.Size = new System.Drawing.Size(326, 210);
+            this.textBoxLearnResult.TabIndex = 2;
+            // 
+            // textBoxLearnCurGrade
+            // 
+            this.textBoxLearnCurGrade.Location = new System.Drawing.Point(175, 4);
+            this.textBoxLearnCurGrade.Name = "textBoxLearnCurGrade";
+            this.textBoxLearnCurGrade.Size = new System.Drawing.Size(100, 21);
+            this.textBoxLearnCurGrade.TabIndex = 1;
+            // 
+            // labelLearnCurGrade
+            // 
+            this.labelLearnCurGrade.AutoSize = true;
+            this.labelLearnCurGrade.Location = new System.Drawing.Point(26, 10);
+            this.labelLearnCurGrade.Name = "labelLearnCurGrade";
+            this.labelLearnCurGrade.Size = new System.Drawing.Size(83, 12);
+            this.labelLearnCurGrade.TabIndex = 0;
+            this.labelLearnCurGrade.Text = "当前样本级别:";
+            // 
+            // btnEndBatchLearn
+            // 
+            this.btnEndBatchLearn.Location = new System.Drawing.Point(598, 12);
+            this.btnEndBatchLearn.Name = "btnEndBatchLearn";
+            this.btnEndBatchLearn.Size = new System.Drawing.Size(101, 23);
+            this.btnEndBatchLearn.TabIndex = 3;
+            this.btnEndBatchLearn.Text = "结束批次学习";
+            this.btnEndBatchLearn.UseVisualStyleBackColor = true;
+            this.btnEndBatchLearn.Click += new System.EventHandler(this.btnEndBatchLearn_Click);
+            // 
+            // btnLearn
+            // 
+            this.btnLearn.Location = new System.Drawing.Point(473, 12);
+            this.btnLearn.Name = "btnLearn";
+            this.btnLearn.Size = new System.Drawing.Size(90, 23);
+            this.btnLearn.TabIndex = 2;
+            this.btnLearn.Text = "单次学习";
+            this.btnLearn.UseVisualStyleBackColor = true;
+            this.btnLearn.Click += new System.EventHandler(this.btnLearn_Click);
+            // 
+            // btnBeginBatchLearn
+            // 
+            this.btnBeginBatchLearn.Location = new System.Drawing.Point(338, 12);
+            this.btnBeginBatchLearn.Name = "btnBeginBatchLearn";
+            this.btnBeginBatchLearn.Size = new System.Drawing.Size(95, 23);
+            this.btnBeginBatchLearn.TabIndex = 1;
+            this.btnBeginBatchLearn.Text = "开始批次学习";
+            this.btnBeginBatchLearn.UseVisualStyleBackColor = true;
+            this.btnBeginBatchLearn.Click += new System.EventHandler(this.btnBeginBatchLearn_Click);
             // 
             // PrimaryForm
             // 
@@ -417,21 +418,21 @@
             this.tabCtrl.ResumeLayout(false);
             this.tabPageClassify.ResumeLayout(false);
             this.tabPageClassify.PerformLayout();
+            this.panelStatistics.ResumeLayout(false);
+            this.panelStatistics.PerformLayout();
+            this.panelClassfigy.ResumeLayout(false);
+            this.panelClassfigy.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.picBoxClassify)).EndInit();
             this.panelClassifyResult.ResumeLayout(false);
             this.panelClassifyResult.PerformLayout();
             this.tabPageLearn.ResumeLayout(false);
             this.tabPageLearn.PerformLayout();
-            this.panelClassfigy.ResumeLayout(false);
-            this.panelClassfigy.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picBoxClassify)).EndInit();
-            this.panelStatistics.ResumeLayout(false);
-            this.panelStatistics.PerformLayout();
-            this.panelLearn.ResumeLayout(false);
-            this.panelLearnResult.ResumeLayout(false);
-            this.panelLearnResult.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.picBoxLearn)).EndInit();
             this.panelLearnStatistics.ResumeLayout(false);
             this.panelLearnStatistics.PerformLayout();
+            this.panelLearn.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.picBoxLearn)).EndInit();
+            this.panelLearnResult.ResumeLayout(false);
+            this.panelLearnResult.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -459,7 +460,7 @@
         private System.Windows.Forms.Label labelClassfyGradeCnt;
         private System.Windows.Forms.Panel panelLearnStatistics;
         private System.Windows.Forms.TextBox textBoxLearnStatistics;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox textBoxLearnTotalCount;
         private System.Windows.Forms.Label labelLearnStatistics;
         private System.Windows.Forms.Label labelLearnState;
         private System.Windows.Forms.Panel panelLearnResult;
