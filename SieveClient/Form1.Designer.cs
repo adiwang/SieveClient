@@ -111,7 +111,7 @@
             this.panelStatistics.Controls.Add(this.textBoxClassfyGradeCnt);
             this.panelStatistics.Controls.Add(this.labelClassfyGradeCnt);
             this.panelStatistics.Controls.Add(this.textBoxClassifyStatistics);
-            this.panelStatistics.Location = new System.Drawing.Point(7, 14);
+            this.panelStatistics.Location = new System.Drawing.Point(3, 14);
             this.panelStatistics.Name = "panelStatistics";
             this.panelStatistics.Size = new System.Drawing.Size(302, 363);
             this.panelStatistics.TabIndex = 9;
