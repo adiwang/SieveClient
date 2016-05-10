@@ -10,9 +10,10 @@ namespace NetIO
 {
     public delegate void FValidatePosReqpEventHandler(UInt32 result, string image_path);
     public delegate void SProcessResultEventHandler(UInt32 result, int group, int rank);
-    public delegate void SEndBatchProcessRepEventHandler(UInt32 result);
+    public delegate void SEndBatchProcessRepEventHandler(UInt32 result, List<netmessage.LeafGradeCount> leaf_grade_counts);
     public delegate void SRegisterClientRepEventHandler(UInt32 result);
     public delegate void SSetProcessStateRepEventHandler(UInt32 result);
+    public delegate void SLearnSampleRepEventHandler(UInt32 result, int group, int rank);
 
     public class ServerClient
     {
@@ -31,6 +32,7 @@ namespace NetIO
         public event SEndBatchProcessRepEventHandler _sEndBatchProcessRep;
         public event SRegisterClientRepEventHandler _sRegisterClientRep;
         public event SSetProcessStateRepEventHandler _sSetProcessStateRep;
+        public event SLearnSampleRepEventHandler _sLearnSampleRep;
 
         public void OnFValidatePosReqp(UInt32 result, string image_path)
         {
@@ -48,11 +50,11 @@ namespace NetIO
             }
         }
 
-        public void OnSEndBatchProcessRep(UInt32 result)
+        public void OnSEndBatchProcessRep(UInt32 result, List<netmessage.LeafGradeCount> leaf_grade_counts)
         {
             if (_sEndBatchProcessRep != null)
             {
-                _sEndBatchProcessRep(result);
+                _sEndBatchProcessRep(result, leaf_grade_counts);
             }
         }
 
@@ -69,6 +71,14 @@ namespace NetIO
             if (_sSetProcessStateRep != null)
             {
                 _sSetProcessStateRep(result);
+            }
+        }
+
+        public void OnSLearnSampleRep(UInt32 result, int group, int rank)
+        {
+            if (_sLearnSampleRep != null)
+            {
+                _sLearnSampleRep(result, group, rank);
             }
         }
 
@@ -129,6 +139,18 @@ namespace NetIO
             remove
             {
                 _sSetProcessStateRep -= value;
+            }
+        }
+
+        public event SLearnSampleRepEventHandler SLearnSampleRep
+        {
+            add
+            {
+                _sLearnSampleRep += value;
+            }
+            remove
+            {
+                _sLearnSampleRep -= value;
             }
         }
 

@@ -34,7 +34,7 @@ namespace NetIO
         {
             UnMarshal(data);
             ServerClient client = (ServerClient)userdata;
-            client.OnSRegisterClientRep(result);
+            client.OnSLearnSampleRep(result, group, rank);
         }
 
         public void Marshal()
