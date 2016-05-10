@@ -62,12 +62,14 @@
     <Compile Include="NetIO\netmessage.cs" />
     <Compile Include="NetIO\PacketSync.cs" />
     <Compile Include="NetIO\Protocols\CEndBatchProcessReq.cs" />
+    <Compile Include="NetIO\Protocols\CLearnSampleReq.cs" />
     <Compile Include="NetIO\Protocols\CRegisterClientReq.cs" />
     <Compile Include="NetIO\Protocols\CSetProcessStateReq.cs" />
     <Compile Include="NetIO\Protocols\FValidatePosReqp.cs" />
     <Compile Include="NetIO\Protocols\Protocol.cs" />
     <Compile Include="NetIO\Protocols\ProtocolID.cs" />
     <Compile Include="NetIO\Protocols\SEndBatchProcessRep.cs" />
+    <Compile Include="NetIO\Protocols\SLearnSampleRep.cs" />
     <Compile Include="NetIO\Protocols\SProcessResult.cs" />
     <Compile Include="NetIO\Protocols\SRegisterClientRep.cs" />
     <Compile Include="NetIO\Protocols\SSetProcessStateRep.cs" />
