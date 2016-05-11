@@ -53,6 +53,8 @@ namespace NetIO
         public void RecvData(byte[] data, int len)
         {
             int iret = 0;           // 本次接收到的数据中读取到的位置
+            // 多读出一个字节0x00
+            // int len = datalen - 1;
             while (iret < len || _true_packet_len >= NetBase.NET_PACKAGE_HEADLEN + 2)
             {
                 // 数据未读取完或者已读取的数据足够分析则根据parsetype进入循环进行不同的处理
@@ -196,6 +198,8 @@ namespace NetIO
                 // 回调帧数据给用户
                 if (FullPacketEvent != null)
                 {
+                    // 将最后1字节的包尾数据删除
+                    _thread_packetdata.RemoveAt(_thread_packetdata.Count - 1);
                     FullPacketEvent(ref _packet, _thread_packetdata.ToArray(), UserData);
                 }
                 _parseType = ParseType.PARSE_NOTHING;
