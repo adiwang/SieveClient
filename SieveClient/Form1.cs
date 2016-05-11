@@ -54,6 +54,8 @@ namespace SieveClient
             InitializeComponent();
             InitServerClient();
             InitCtrlClient();
+            // TODO:  线程间操作无效: 从不是创建控件的线程访问它
+            CheckForIllegalCrossThreadCalls = false; 
 
             // 初始化成员变量
             isInProcess = false;
