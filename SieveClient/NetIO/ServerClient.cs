@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace NetIO
@@ -26,6 +27,10 @@ namespace NetIO
         private byte _tail;                                             // 封包尾部字节
         private Dictionary<int/*protocol id*/, Protocol> _protocols;    // 协议map
         private object _userdata;                                       // userdata
+        private string _host;                                           // casd的ip
+        private short _port;                                            // casd的port
+        private Thread _check_state_thread;                             // 连接状态监测线程
+
         // 协议响应事件，为了通知客户端
         public event FValidatePosReqpEventHandler _fValidatePosReqp;
         public event SProcessResultEventHandler _sProcessResult;
@@ -33,6 +38,7 @@ namespace NetIO
         public event SRegisterClientRepEventHandler _sRegisterClientRep;
         public event SSetProcessStateRepEventHandler _sSetProcessStateRep;
         public event SLearnSampleRepEventHandler _sLearnSampleRep;
+
 
         public void OnFValidatePosReqp(UInt32 result, string image_path)
         {
@@ -178,6 +184,8 @@ namespace NetIO
 
         public bool Connect(string host, short port)
         {
+            this._host = host;
+            this._port = port;
             try
             {
                 _client.Connect(host, port);
@@ -195,6 +203,55 @@ namespace NetIO
                 _streamToServer.BeginRead(_buffer, 0, BufferSize, callback, null);
             }
             return true;
+        }
+
+        private void CheckState()
+        {
+            while (true)
+            {
+                Thread.Sleep(5000);
+                if(!_client.Connected)
+                {
+                    try
+                    {
+                        if (_streamToServer != null)
+                        {
+                            _streamToServer.Dispose();
+                            _streamToServer = null;
+                        }
+                        try
+                        {
+                            _client.Close();
+                            _client = new TcpClient();
+                            _client.Connect(this._host, this._port);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("Connect Exception|{0}", ex.Message);
+                            continue;
+                        }
+                        _streamToServer = _client.GetStream();
+                        // 调用BeginRead开始接收数据
+                        lock (_streamToServer)
+                        {
+                            AsyncCallback callback = new AsyncCallback(ReadComplete);
+                            _streamToServer.BeginRead(_buffer, 0, BufferSize, callback, null);
+                        }
+                    }
+                    catch
+                    {
+                        continue;
+                    }
+                }
+            }   // end of while true loop
+        }
+
+        public void CreateCheckStateThread()
+        {
+            ThreadStart ts = new ThreadStart(CheckState);
+            _check_state_thread = new Thread(ts);
+            _check_state_thread.IsBackground = true;
+            _check_state_thread.Start();
         }
 
         public void Send(byte[] msg)
