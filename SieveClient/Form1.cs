@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Configuration;
+using System.Threading;
 
 namespace SieveClient
 {
@@ -249,6 +250,7 @@ namespace SieveClient
                 MessageBox.Show(err_msg);
             }
             RegisterProtocol();
+            serverClient.CreateCheckStateThread();
         }
 
         private void InitCtrlClient()
@@ -262,6 +264,7 @@ namespace SieveClient
                 string err_msg = string.Format(TextRes.text["ConnectCtrlErr"], ctrl_ip, ctrl_port);
                 MessageBox.Show(err_msg);
             }
+            ctrlClient.CreateCheckStateThread();
         }
 
         private void SendRegisterClient()
@@ -310,6 +313,16 @@ namespace SieveClient
             byte[] ctrlMsg = new byte[1];
             ctrlMsg[0] = 0x01;
             ctrlClient.Send(ctrlMsg);
+
+            //TODO: just 4 test, to be deleted
+            /*
+            ThreadStart ts = new ThreadStart(delegate()
+            {
+                OnFValidatePosReqp(0, "https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo_top_ca79a146.png");
+            });
+            Thread th = new Thread(ts);
+            th.Start();
+            */
         }
 
         private void picBoxClassify_LoadComplete(object sender, AsyncCompletedEventArgs e)
@@ -369,6 +382,30 @@ namespace SieveClient
             btnLearn.Enabled = false;
             btnEndBatchLearn.Enabled = false;
             SendEndBatchProcessPotocol((int)curState);
+
+            //TODO: to be deleted
+            /*
+            ThreadStart ts = new ThreadStart(delegate()
+            {
+                List<netmessage.LeafGradeCount> leaf_grade_counts = new List<netmessage.LeafGradeCount>(){
+                    new netmessage.LeafGradeCount
+                    {
+                        group = 1,
+                        rank = 2,
+                        count = 3,
+                    },
+                    new netmessage.LeafGradeCount
+                    {
+                        group = 2,
+                        rank = 3,
+                        count = 4,
+                    },
+                };
+                OnSEndBatchProcessRep(0, leaf_grade_counts);
+            });
+            Thread th = new Thread(ts);
+            th.Start();
+            */
         }
 
         private void btnLearn_Click(object sender, EventArgs e)
