@@ -54,8 +54,6 @@ namespace SieveClient
             InitializeComponent();
             InitServerClient();
             InitCtrlClient();
-            // TODO:  线程间操作无效: 从不是创建控件的线程访问它
-            CheckForIllegalCrossThreadCalls = false; 
 
             // 初始化成员变量
             isInProcess = false;
@@ -91,32 +89,37 @@ namespace SieveClient
             if (curState == State.ST_CLASS)
             {
                 // 当前状态是分级
-                picBoxClassify.LoadCompleted += new AsyncCompletedEventHandler(picBoxClassify_LoadComplete);
-                picBoxClassify.UseWaitCursor = true;
-                picBoxClassify.WaitOnLoad = false;
-                picBoxClassify.LoadAsync(url);
-
-                if(result != 0)
+                this.BeginInvoke((MethodInvoker)delegate()
                 {
-                    // 摆放不正确
-                    labelClassifyState.Text = TextRes.text["ValidatePosErr"];
-                    btnClassify.Enabled = true;
-                }
+                    picBoxClassify.LoadCompleted += new AsyncCompletedEventHandler(picBoxClassify_LoadComplete);
+                    picBoxClassify.UseWaitCursor = true;
+                    picBoxClassify.WaitOnLoad = false;
+                    picBoxClassify.LoadAsync(url);
+                    if (result != 0)
+                    {
+                        // 摆放不正确
+                        labelClassifyState.Text = TextRes.text["ValidatePosErr"];
+                        btnClassify.Enabled = true;
+                    }
+                });                
             }
             else if (curState == State.ST_LEARN)
             {
-                // 当前状态是学习
-                picBoxLearn.LoadCompleted += new AsyncCompletedEventHandler(picBoxLearn_LoadComplete);
-                picBoxLearn.UseWaitCursor = true;
-                picBoxLearn.WaitOnLoad = false;
-                picBoxLearn.LoadAsync(url);
-
-                if (result != 0)
+                this.BeginInvoke((MethodInvoker)delegate()
                 {
-                    // 摆放不正确
-                    labelLearnState.Text = TextRes.text["ValidatePosErr"];
-                    btnLearn.Enabled = true;
-                }
+                    // 当前状态是学习
+                    picBoxLearn.LoadCompleted += new AsyncCompletedEventHandler(picBoxLearn_LoadComplete);
+                    picBoxLearn.UseWaitCursor = true;
+                    picBoxLearn.WaitOnLoad = false;
+                    picBoxLearn.LoadAsync(url);
+
+                    if (result != 0)
+                    {
+                        // 摆放不正确
+                        labelLearnState.Text = TextRes.text["ValidatePosErr"];
+                        btnLearn.Enabled = true;
+                    }
+                });
             }
             
             if (result == 0)
@@ -134,22 +137,26 @@ namespace SieveClient
             if(curState == State.ST_CLASS)
             {
                 // 当前状态是分级
-                labelClassifyState.Text = TextRes.text["SingleClassifyEnd"];
-                btnClassify.Enabled = true;
-                
                 classifyResults.Add(lg);
-                textBoxClassifyCount.Text = classifyResults.Count.ToString();
-                textBoxClassfiyResult.Text += String.Format(TextRes.text["SingleClassResult"], classifyResults.Count, lg.ToString()); 
+                this.BeginInvoke((MethodInvoker)delegate()
+                {
+                    labelClassifyState.Text = TextRes.text["SingleClassifyEnd"];
+                    btnClassify.Enabled = true;
+                    textBoxClassifyCount.Text = classifyResults.Count.ToString();
+                    textBoxClassfiyResult.AppendText(String.Format(TextRes.text["SingleClassResult"], classifyResults.Count, lg.ToString()));
+                });
             }
             else if (curState == State.ST_LEARN)
             {
                 // 当前状态是学习
-                labelLearnState.Text = TextRes.text["SingleLearnEnd"];
-                btnLearn.Enabled = true;
-
                 learnResults.Add(lg);
-                textBoxLearnCnt.Text = learnResults.Count.ToString();
-                textBoxLearnResult.Text += String.Format(TextRes.text["SingleLearnResult"], learnResults.Count, lg.ToString()); 
+                this.BeginInvoke((MethodInvoker)delegate()
+                {
+                    labelLearnState.Text = TextRes.text["SingleLearnEnd"];
+                    btnLearn.Enabled = true;
+                    textBoxLearnCnt.Text = learnResults.Count.ToString();
+                    textBoxLearnResult.AppendText(String.Format(TextRes.text["SingleLearnResult"], learnResults.Count, lg.ToString()));
+                });
             }
         }
 
@@ -160,11 +167,6 @@ namespace SieveClient
             Dictionary<string, int> grade2count = new Dictionary<string, int>();
             if (curState == State.ST_CLASS)
             {
-                panelClassfigy.Visible = false;
-                panelStatistics.Visible = true;
-
-                btnBeginBatchClassify.Enabled = true;
-
                 // 分级的统计报表生成
                 foreach (LeafGrade lg in classifyResults)
                 {
@@ -182,16 +184,18 @@ namespace SieveClient
                 {
                     resStr += string.Format(TextRes.text["StatisticsClassResult"], grade, grade2count[grade], (double)grade2count[grade] / grade2count.Count);
                 }
-                textBoxClassfyGradeCnt.Text = grade2count.Count.ToString();
-                textBoxClassifyStatistics.Text = resStr;
+
+                this.BeginInvoke((MethodInvoker)delegate()
+                {
+                    panelClassfigy.Visible = false;
+                    panelStatistics.Visible = true;
+                    btnBeginBatchClassify.Enabled = true;
+                    textBoxClassfyGradeCnt.Text = grade2count.Count.ToString();
+                    textBoxClassifyStatistics.Text = resStr;
+                });
             }
             else if (curState == State.ST_LEARN)
             {
-                panelLearn.Visible = false;
-                panelLearnStatistics.Visible = true;
-
-                btnBeginBatchLearn.Enabled = true;
-
                 // 学习的统计报表生成
                 foreach (netmessage.LeafGradeCount lgc in leaf_grade_counts)
                 {
@@ -203,8 +207,15 @@ namespace SieveClient
                 {
                     resStr += string.Format(TextRes.text["StatisticsLearnResult"], kv.Key, kv.Value, (double)kv.Value / totalCount);
                 }
-                textBoxLearnTotalCount.Text = totalCount.ToString();
-                textBoxLearnStatistics.Text = resStr;
+
+                this.BeginInvoke((MethodInvoker)delegate()
+                {
+                    panelLearn.Visible = false;
+                    panelLearnStatistics.Visible = true;
+                    btnBeginBatchLearn.Enabled = true;
+                    textBoxLearnTotalCount.Text = totalCount.ToString();
+                    textBoxLearnStatistics.Text = resStr;
+                });
             }
             isInProcess = false;
         }
