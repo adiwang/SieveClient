@@ -12,6 +12,8 @@ namespace NetIO
         public const int ProtocoID = (int)ProtocolID.PROTOCOL_ID_SPROCESSFEATUREREP;
 
         public UInt32 result;
+        public Int32 group;
+        public Int32 rank;
         public byte[] marshalData;
 
         public SProcessResult()
@@ -29,13 +31,15 @@ namespace NetIO
             UnMarshal(data);
             ServerClient client = (ServerClient)userdata;
             //TODO: 修改协议，替换为真正的字段
-            client.OnSProcessResult(result, 1, 1);
+            client.OnSProcessResult(result, group, rank);
         }
 
         public void Marshal()
         {
             netmessage.SProcessResultProto proto = new netmessage.SProcessResultProto();
             proto.result = this.result;
+            proto.group = this.group;
+            proto.rank = this.rank;
             MemoryStream ms = new MemoryStream();
             ProtoBuf.Serializer.Serialize<netmessage.SProcessResultProto>(ms, proto);
             netmessage.CProto cproto = new netmessage.CProto();
@@ -61,6 +65,8 @@ namespace NetIO
             proto = ProtoBuf.Serializer.Deserialize<netmessage.SProcessResultProto>(ms);
             ms.Close();
             this.result = proto.result;
+            this.group = proto.group;
+            this.rank = proto.rank;
         }
 
         public override Protocol Clone()

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Configuration;
 using System.Threading;
+using System.Drawing.Imaging;
 
 namespace SieveClient
 {
@@ -80,6 +81,14 @@ namespace SieveClient
             btnEndBatchLearn.Enabled = false;
             labelLearnState.Text = TextRes.text["WaitBatchLearnBegin"];
 
+            // picturebox的设置
+            picBoxLearn.LoadCompleted += new AsyncCompletedEventHandler(picBoxLearn_LoadComplete);
+            picBoxLearn.UseWaitCursor = true;
+            picBoxLearn.WaitOnLoad = false;
+            picBoxClassify.LoadCompleted += new AsyncCompletedEventHandler(picBoxClassify_LoadComplete);
+            picBoxClassify.UseWaitCursor = true;
+            picBoxClassify.WaitOnLoad = false;
+
             // 发送注册客户端的协议
             SendRegisterClient();
         }
@@ -92,9 +101,6 @@ namespace SieveClient
                 // 当前状态是分级
                 this.BeginInvoke((MethodInvoker)delegate()
                 {
-                    picBoxClassify.LoadCompleted += new AsyncCompletedEventHandler(picBoxClassify_LoadComplete);
-                    picBoxClassify.UseWaitCursor = true;
-                    picBoxClassify.WaitOnLoad = false;
                     picBoxClassify.LoadAsync(url);
                     if (result != 0)
                     {
@@ -109,9 +115,6 @@ namespace SieveClient
                 this.BeginInvoke((MethodInvoker)delegate()
                 {
                     // 当前状态是学习
-                    picBoxLearn.LoadCompleted += new AsyncCompletedEventHandler(picBoxLearn_LoadComplete);
-                    picBoxLearn.UseWaitCursor = true;
-                    picBoxLearn.WaitOnLoad = false;
                     picBoxLearn.LoadAsync(url);
 
                     if (result != 0)
@@ -292,7 +295,8 @@ namespace SieveClient
             textBoxClassfyGradeCnt.Text = "";
             textBoxClassifyStatistics.Text = "";
             textBoxClassifyCount.Text = "";
-            textBoxClassfiyResult.Text = ""; 
+            textBoxClassfiyResult.Text = "";
+            ClearClassifyPicBox();
 
             SendSetProcessStateProtocol((int)curState);
         }
@@ -301,6 +305,7 @@ namespace SieveClient
         {
             btnClassify.Enabled = false;
             btnEndBatchClassify.Enabled = false;
+            ClearClassifyPicBox();
             SendEndBatchProcessPotocol((int)curState);
         }
 
@@ -308,6 +313,8 @@ namespace SieveClient
         {
             btnClassify.Enabled = false;
             labelClassifyState.Text = TextRes.text["InClassifying"];
+
+            ClearClassifyPicBox();
 
             // 向控制器发送控制命令，用来触发相机
             byte[] ctrlMsg = new byte[1];
@@ -327,11 +334,13 @@ namespace SieveClient
 
         private void picBoxClassify_LoadComplete(object sender, AsyncCompletedEventArgs e)
         {
+            picBoxClassify.Image = ZoomPicture(picBoxClassify.Image, picBoxClassify.Width, picBoxClassify.Height);
             picBoxClassify.UseWaitCursor = false;
         }
 
         private void picBoxLearn_LoadComplete(object sender, AsyncCompletedEventArgs e)
         {
+            picBoxLearn.Image = ZoomPicture(picBoxLearn.Image, picBoxLearn.Width, picBoxLearn.Height);
             picBoxLearn.UseWaitCursor = false;
         }
 
@@ -372,7 +381,8 @@ namespace SieveClient
             textBoxLearnTotalCount.Text = "";
             textBoxLearnStatistics.Text = "";
             textBoxLearnCnt.Text = "";
-            textBoxLearnResult.Text = ""; 
+            textBoxLearnResult.Text = "";
+            ClearLearnPicBox();
 
             SendSetProcessStateProtocol((int)curState);
         }
@@ -381,6 +391,7 @@ namespace SieveClient
         {
             btnLearn.Enabled = false;
             btnEndBatchLearn.Enabled = false;
+            ClearLearnPicBox();
             SendEndBatchProcessPotocol((int)curState);
 
             //TODO: to be deleted
@@ -421,6 +432,7 @@ namespace SieveClient
                 MessageBox.Show(TextRes.text["InvalidLearnGradeErr"]);
                 return;
             }
+            ClearLearnPicBox();
             // 发送学习样本协议
             NetIO.CLearnSampleReq req = new NetIO.CLearnSampleReq();
             btnLearn.Enabled = false;
@@ -458,6 +470,91 @@ namespace SieveClient
             {
                 // 正在批次处理中的程序不可更换tab页
                 e.Cancel = true;
+            }
+        }        
+
+        // 按比例缩放图片
+        public Image ZoomPicture(Image SourceImage, int TargetWidth, int TargetHeight)
+        {
+            int IntWidth; //新的图片宽
+            int IntHeight; //新的图片高
+            try
+            {
+                System.Drawing.Imaging.ImageFormat format = SourceImage.RawFormat;
+                System.Drawing.Bitmap SaveImage = new System.Drawing.Bitmap(TargetWidth, TargetHeight);
+                Graphics g = Graphics.FromImage(SaveImage);
+                g.Clear(Color.White);
+
+                //计算缩放图片的大小
+
+                if (SourceImage.Width > TargetWidth && SourceImage.Height <= TargetHeight)//宽度比目的图片宽度大，长度比目的图片长度小
+                {
+                    IntWidth = TargetWidth;
+                    IntHeight = (IntWidth * SourceImage.Height) / SourceImage.Width;
+                }
+                else if (SourceImage.Width <= TargetWidth && SourceImage.Height > TargetHeight)//宽度比目的图片宽度小，长度比目的图片长度大
+                {
+                    IntHeight = TargetHeight;
+                    IntWidth = (IntHeight * SourceImage.Width) / SourceImage.Height;
+                }
+                else if (SourceImage.Width <= TargetWidth && SourceImage.Height <= TargetHeight) //长宽比目的图片长宽都小
+                {
+                    IntHeight = SourceImage.Width;
+                    IntWidth = SourceImage.Height;
+                }
+                else//长宽比目的图片的长宽都大
+                {
+                    IntWidth = TargetWidth;
+                    IntHeight = (IntWidth * SourceImage.Height) / SourceImage.Width;
+                    if (IntHeight > TargetHeight)//重新计算
+                    {
+                        IntHeight = TargetHeight;
+                        IntWidth = (IntHeight * SourceImage.Width) / SourceImage.Height;
+                    }
+                }
+
+                g.DrawImage(SourceImage, (TargetWidth - IntWidth) / 2, (TargetHeight - IntHeight) / 2, IntWidth, IntHeight);
+                SourceImage.Dispose();
+
+                return SaveImage;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+
+            return null;
+        }
+
+        private void ClearLearnPicBox()
+        {
+            if (picBoxLearn.Image != null)
+            {
+                picBoxLearn.Image.Dispose();
+                picBoxLearn.Image = null;
+                if (picBoxLearn.InitialImage != null)
+                {
+                    picBoxLearn.InitialImage.Dispose();
+                    picBoxLearn.InitialImage = null;
+                }
+                picBoxLearn.ImageLocation = null;
+                picBoxLearn.Refresh();
+            }
+        }
+
+        private void ClearClassifyPicBox()
+        {
+            if (picBoxClassify.Image != null)
+            {
+                picBoxClassify.Image.Dispose();
+                picBoxClassify.Image = null;
+                if (picBoxClassify.InitialImage != null)
+                {
+                    picBoxClassify.InitialImage.Dispose();
+                    picBoxClassify.InitialImage = null;
+                }
+                picBoxClassify.ImageLocation = null;
+                picBoxClassify.Refresh();
             }
         }
     }
