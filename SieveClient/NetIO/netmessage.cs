@@ -22,9 +22,9 @@ namespace netmessage
       get { return _id; }
       set { _id = value; }
     }
-    private string _body;
+    private byte[] _body;
     [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"body", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string body
+    public byte[] body
     {
       get { return _body; }
       set { _body = value; }

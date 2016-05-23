@@ -12,7 +12,7 @@ namespace NetIO
     public delegate void FValidatePosReqpEventHandler(UInt32 result, string image_path);
     public delegate void SProcessResultEventHandler(UInt32 result, int group, int rank);
     public delegate void SEndBatchProcessRepEventHandler(UInt32 result, List<netmessage.LeafGradeCount> leaf_grade_counts);
-    public delegate void SRegisterClientRepEventHandler(UInt32 result);
+    public delegate void SRegisterClientRepEventHandler(UInt32 result, Int32 samples_count);
     public delegate void SSetProcessStateRepEventHandler(UInt32 result);
     public delegate void SLearnSampleRepEventHandler(UInt32 result, int group, int rank);
 
@@ -64,11 +64,11 @@ namespace NetIO
             }
         }
 
-        public void OnSRegisterClientRep(UInt32 result)
+        public void OnSRegisterClientRep(UInt32 result, Int32 samples_count)
         {
             if (_sRegisterClientRep != null)
             {
-                _sRegisterClientRep(result);
+                _sRegisterClientRep(result, samples_count);
             }
         }
 
@@ -326,7 +326,8 @@ namespace NetIO
                 proto = ProtoBuf.Serializer.Deserialize<netmessage.CProto>(ms);
                 ms.Close();
                 protoId = proto.id;
-                protoData = System.Text.Encoding.Default.GetBytes(proto.body);
+                //protoData = System.Text.Encoding.Default.GetBytes(proto.body);
+                protoData = proto.body;
                 dataSize = protoData.Length;
             }
             else if (packetHead.type == 2)

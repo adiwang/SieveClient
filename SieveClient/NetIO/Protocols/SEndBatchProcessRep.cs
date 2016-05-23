@@ -45,7 +45,7 @@ namespace NetIO
             ProtoBuf.Serializer.Serialize<netmessage.SEndBatchProcessRepProto>(ms, proto);
             netmessage.CProto cproto = new netmessage.CProto();
             cproto.id = ProtocoID;
-            cproto.body = System.Text.Encoding.Default.GetString(ms.ToArray());
+            cproto.body = ms.ToArray();
             ms.Seek(0, SeekOrigin.Begin);
             ProtoBuf.Serializer.Serialize<netmessage.CProto>(ms, cproto);
             byte[] data = ms.ToArray();
