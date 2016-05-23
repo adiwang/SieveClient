@@ -224,7 +224,7 @@ namespace SieveClient
             isInProcess = false;
         }
 
-        private void OnSRegisterClientRep(UInt32 result)
+        private void OnSRegisterClientRep(UInt32 result, Int32 samples_count)
         {
             // TODO:
         }
