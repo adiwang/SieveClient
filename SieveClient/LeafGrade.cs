@@ -10,16 +10,28 @@ namespace SieveClient
     {
         public int group;               // 组别
         public int rank;                // 级别
-        
+
         public static Dictionary<int, string> group2Desc = new Dictionary<int, string>()
             {
                 {1, "BL"},
-                {2, "XL"},
+                {2, "BF"},
+                {3, "BR"},
+                {4, "CL"},
+                {5, "CF"},
+                {6, "XL"},
+                {7, "XF"},
+                {8, "NOT"},
             };
         public static Dictionary<string, int> desc2group = new Dictionary<string, int>()
             {
                 {"BL", 1},
-                {"XL", 2},
+                {"BF", 2},
+                {"BR", 3},
+                {"CL", 4},
+                {"CF", 5},
+                {"XL", 6},
+                {"XF", 7},
+                {"NOT", 8},
             };
 
         public LeafGrade()
