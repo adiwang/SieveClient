@@ -206,7 +206,7 @@ namespace SieveClient
                     panelClassfigy.Visible = false;
                     panelStatistics.Visible = true;
                     btnBeginBatchClassify.Enabled = true;
-                    textBoxClassfyGradeCnt.Text = grade2count.Count.ToString();
+                    textBoxClassfyGradeCnt.Text = totalCount.ToString();
                     textBoxClassifyStatistics.Text = resStr;
                 });
             }
