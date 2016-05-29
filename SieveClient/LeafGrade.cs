@@ -33,6 +33,16 @@ namespace SieveClient
                 {"XF", 7},
                 {"NOT", 8},
             };
+        public static List<string> leafgrades = new List<string>()
+        {
+            "B1L", "B2L", "B3L", "B4L",
+            "B1F", "B2F", "B3F", "B4F",
+            "B1F", "B2F", "B3F",
+            "C1L", "C2L", "C3L", "C4L",
+            "C1F", "C2F", "C3F", "C4F",
+            "X1L", "X2L", "X3L", "X4L",
+            "X1F", "X2F", "X3F", "X4F",
+        };
 
         public LeafGrade()
         {

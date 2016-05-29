@@ -89,6 +89,14 @@ namespace SieveClient
             picBoxClassify.UseWaitCursor = true;
             picBoxClassify.WaitOnLoad = true;
 
+            // 初始化combox
+            int i = 0;
+            foreach (string lg in LeafGrade.leafgrades)
+            {
+                comboBoxLearn.Items.Insert(i, lg);
+                i++;
+            }
+
             // 发送注册客户端的协议
             SendRegisterClient();
         }
@@ -421,12 +429,13 @@ namespace SieveClient
 
         private void btnLearn_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(textBoxLearnCurGrade.Text))
+            if (comboBoxLearn.SelectedItem == null)
             {
                 MessageBox.Show(TextRes.text["EmptyLearnGradeErr"]);
                 return;
             }
-            LeafGrade lg = LeafGrade.BuildLeafGrade(textBoxLearnCurGrade.Text.ToUpper());
+            string cur_item = comboBoxLearn.SelectedItem.ToString();
+            LeafGrade lg = LeafGrade.BuildLeafGrade(cur_item.ToUpper());
             if (lg == null)
             {
                 MessageBox.Show(TextRes.text["InvalidLearnGradeErr"]);

@@ -25,7 +25,7 @@ namespace SieveClient
             {"SingleLearnEnd", "单次学习结束"},
             {"SingleLearnResult", "样本{0}: , 等级: {1}\r\n"},
             {"StatisticsLearnResult", "等级: {0}, 学习数量: {1}, 样本比例: {2:P}\r\n"},
-            {"EmptyLearnGradeErr", "请输入样本等级"},
+            {"EmptyLearnGradeErr", "请选择样本等级"},
             {"InvalidLearnGradeErr", "样本等级输入有误，请检查样本等级"},
         };
     }

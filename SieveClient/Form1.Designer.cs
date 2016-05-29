@@ -58,11 +58,11 @@
             this.textBoxLearnCnt = new System.Windows.Forms.TextBox();
             this.labelLearnCnt = new System.Windows.Forms.Label();
             this.textBoxLearnResult = new System.Windows.Forms.TextBox();
-            this.textBoxLearnCurGrade = new System.Windows.Forms.TextBox();
             this.labelLearnCurGrade = new System.Windows.Forms.Label();
             this.btnEndBatchLearn = new System.Windows.Forms.Button();
             this.btnLearn = new System.Windows.Forms.Button();
             this.btnBeginBatchLearn = new System.Windows.Forms.Button();
+            this.comboBoxLearn = new System.Windows.Forms.ComboBox();
             this.tabCtrl.SuspendLayout();
             this.tabPageClassify.SuspendLayout();
             this.panelStatistics.SuspendLayout();
@@ -327,10 +327,10 @@
             // 
             // panelLearnResult
             // 
+            this.panelLearnResult.Controls.Add(this.comboBoxLearn);
             this.panelLearnResult.Controls.Add(this.textBoxLearnCnt);
             this.panelLearnResult.Controls.Add(this.labelLearnCnt);
             this.panelLearnResult.Controls.Add(this.textBoxLearnResult);
-            this.panelLearnResult.Controls.Add(this.textBoxLearnCurGrade);
             this.panelLearnResult.Controls.Add(this.labelLearnCurGrade);
             this.panelLearnResult.Location = new System.Drawing.Point(338, 53);
             this.panelLearnResult.Name = "panelLearnResult";
@@ -360,13 +360,6 @@
             this.textBoxLearnResult.Name = "textBoxLearnResult";
             this.textBoxLearnResult.Size = new System.Drawing.Size(326, 210);
             this.textBoxLearnResult.TabIndex = 2;
-            // 
-            // textBoxLearnCurGrade
-            // 
-            this.textBoxLearnCurGrade.Location = new System.Drawing.Point(175, 4);
-            this.textBoxLearnCurGrade.Name = "textBoxLearnCurGrade";
-            this.textBoxLearnCurGrade.Size = new System.Drawing.Size(100, 21);
-            this.textBoxLearnCurGrade.TabIndex = 1;
             // 
             // labelLearnCurGrade
             // 
@@ -406,6 +399,15 @@
             this.btnBeginBatchLearn.Text = "开始批次学习";
             this.btnBeginBatchLearn.UseVisualStyleBackColor = true;
             this.btnBeginBatchLearn.Click += new System.EventHandler(this.btnBeginBatchLearn_Click);
+            // 
+            // comboBoxLearn
+            // 
+            this.comboBoxLearn.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxLearn.FormattingEnabled = true;
+            this.comboBoxLearn.Location = new System.Drawing.Point(175, 3);
+            this.comboBoxLearn.Name = "comboBoxLearn";
+            this.comboBoxLearn.Size = new System.Drawing.Size(101, 20);
+            this.comboBoxLearn.TabIndex = 5;
             // 
             // PrimaryForm
             // 
@@ -465,7 +467,6 @@
         private System.Windows.Forms.Label labelLearnState;
         private System.Windows.Forms.Panel panelLearnResult;
         private System.Windows.Forms.TextBox textBoxLearnResult;
-        private System.Windows.Forms.TextBox textBoxLearnCurGrade;
         private System.Windows.Forms.Label labelLearnCurGrade;
         private System.Windows.Forms.Button btnEndBatchLearn;
         private System.Windows.Forms.Button btnLearn;
@@ -474,6 +475,7 @@
         private System.Windows.Forms.PictureBox picBoxLearn;
         private System.Windows.Forms.TextBox textBoxLearnCnt;
         private System.Windows.Forms.Label labelLearnCnt;
+        private System.Windows.Forms.ComboBox comboBoxLearn;
     }
 }
 
