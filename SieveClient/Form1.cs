@@ -84,10 +84,10 @@ namespace SieveClient
             // picturebox的设置
             picBoxLearn.LoadCompleted += new AsyncCompletedEventHandler(picBoxLearn_LoadComplete);
             picBoxLearn.UseWaitCursor = true;
-            picBoxLearn.WaitOnLoad = false;
+            picBoxLearn.WaitOnLoad = true;
             picBoxClassify.LoadCompleted += new AsyncCompletedEventHandler(picBoxClassify_LoadComplete);
             picBoxClassify.UseWaitCursor = true;
-            picBoxClassify.WaitOnLoad = false;
+            picBoxClassify.WaitOnLoad = true;
 
             // 发送注册客户端的协议
             SendRegisterClient();
