@@ -194,7 +194,11 @@ namespace SieveClient
                 }
                 foreach (string grade in grade2count.Keys)
                 {
-                    resStr += string.Format(TextRes.text["StatisticsClassResult"], grade, grade2count[grade], (double)grade2count[grade] / grade2count.Count);
+                    totalCount += grade2count[grade];
+                }
+                foreach (string grade in grade2count.Keys)
+                {
+                    resStr += string.Format(TextRes.text["StatisticsClassResult"], grade, grade2count[grade], (double)grade2count[grade] / totalCount);
                 }
 
                 this.BeginInvoke((MethodInvoker)delegate()
