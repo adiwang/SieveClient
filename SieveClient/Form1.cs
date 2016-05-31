@@ -208,6 +208,7 @@ namespace SieveClient
                     btnBeginBatchClassify.Enabled = true;
                     textBoxClassfyGradeCnt.Text = totalCount.ToString();
                     textBoxClassifyStatistics.Text = resStr;
+                    labelClassifyState.Text = TextRes.text["BatchClassifyEnd"];
                 });
             }
             else if (curState == State.ST_LEARN)
@@ -231,6 +232,7 @@ namespace SieveClient
                     btnBeginBatchLearn.Enabled = true;
                     textBoxLearnTotalCount.Text = totalCount.ToString();
                     textBoxLearnStatistics.Text = resStr;
+                    labelLearnState.Text = TextRes.text["BatchLearnEnd"];
                 });
             }
             isInProcess = false;
