@@ -66,14 +66,51 @@ namespace SieveClient
             classifyResults = new List<LeafGrade>();
 
             // 初始化ui
-            // 分类ui的设置
+            InitClassifyUIFrame();
+            InitLearnUIFrame();
+
+            // 发送注册客户端的协议
+            SendRegisterClient();
+        }
+
+        // 分类ui的初始化
+        private void InitClassifyUIFrame()
+        {
+            picBoxClassify.BackColor = Color.FromArgb(255, 60, 60, 61);
+            textBoxClassifyStatistics.BackColor = Color.FromArgb(255, 60, 60, 61);  // black
+            labelClassCurGrade.BackColor = Color.FromArgb(255, 117, 163, 82);       // green
+            labelClassCurGradeDesc.BackColor = Color.FromArgb(255, 117, 163, 82);
+            labelClassfyCnt.BackColor = Color.FromArgb(255, 60, 60, 61);
+            labelGradeCount.BackColor = Color.FromArgb(255, 60, 60, 61);
+            textBoxClassfiyResult.TextAlign = HorizontalAlignment.Left;
+            textBoxClassifyStatistics.TextAlign = HorizontalAlignment.Left;
+
             panelClassfigy.Visible = true;
             panelStatistics.Visible = false;
             btnBeginBatchClassify.Enabled = true;
             btnClassify.Enabled = false;
             btnEndBatchClassify.Enabled = false;
             labelClassifyState.Text = TextRes.text["WaitBatchClassifyBegin"];
-            // 学习ui的设置
+
+            picBoxClassify.LoadCompleted += new AsyncCompletedEventHandler(picBoxClassify_LoadComplete);
+            picBoxClassify.UseWaitCursor = true;
+            picBoxClassify.WaitOnLoad = true;
+        }
+
+        // 学习ui的初始化
+        private void InitLearnUIFrame()
+        {
+            picBoxLearn.BackColor = Color.FromArgb(255, 60, 60, 61);
+            textBoxLearnStatistics.BackColor = Color.FromArgb(255, 60, 60, 61);
+            labelLearnCurGrade.BackColor = Color.FromArgb(255, 37, 119, 189);       // blue
+            labelLearnCurGradeDesc.BackColor = Color.FromArgb(255, 37, 119, 189);
+            comboBoxLearn.BackColor = Color.FromArgb(255, 93, 157, 207);
+            labelLearnCnt.BackColor = Color.FromArgb(255, 60, 60, 61);
+            labelLearnCntDesc.BackColor = Color.FromArgb(255, 60, 60, 61);
+            labelLearnStatistics.BackColor = Color.FromArgb(255, 60, 60, 61);
+            textBoxLearnResult.TextAlign = HorizontalAlignment.Left;
+            textBoxLearnStatistics.TextAlign = HorizontalAlignment.Left;
+
             panelLearn.Visible = true;
             panelLearnStatistics.Visible = false;
             btnBeginBatchLearn.Enabled = true;
@@ -85,9 +122,7 @@ namespace SieveClient
             picBoxLearn.LoadCompleted += new AsyncCompletedEventHandler(picBoxLearn_LoadComplete);
             picBoxLearn.UseWaitCursor = true;
             picBoxLearn.WaitOnLoad = true;
-            picBoxClassify.LoadCompleted += new AsyncCompletedEventHandler(picBoxClassify_LoadComplete);
-            picBoxClassify.UseWaitCursor = true;
-            picBoxClassify.WaitOnLoad = true;
+            
 
             // 初始化combox
             int i = 0;
@@ -96,9 +131,6 @@ namespace SieveClient
                 comboBoxLearn.Items.Insert(i, lg);
                 i++;
             }
-
-            // 发送注册客户端的协议
-            SendRegisterClient();
         }
 
         private void OnFValidatePosReqp(UInt32 result, string image_path)
@@ -154,7 +186,8 @@ namespace SieveClient
                 {
                     labelClassifyState.Text = TextRes.text["SingleClassifyEnd"];
                     btnClassify.Enabled = true;
-                    textBoxClassifyCount.Text = classifyResults.Count.ToString();
+                    labelClassfyCnt.Text = classifyResults.Count.ToString();
+                    labelClassCurGrade.Text = lg.ToString();
                     textBoxClassfiyResult.AppendText(String.Format(TextRes.text["SingleClassResult"], classifyResults.Count, lg.ToString()));
                 });
             }
@@ -166,7 +199,7 @@ namespace SieveClient
                 {
                     labelLearnState.Text = TextRes.text["SingleLearnEnd"];
                     btnLearn.Enabled = true;
-                    textBoxLearnCnt.Text = learnResults.Count.ToString();
+                    labelLearnCnt.Text = learnResults.Count.ToString();
                     textBoxLearnResult.AppendText(String.Format(TextRes.text["SingleLearnResult"], learnResults.Count, lg.ToString()));
                 });
             }
@@ -206,7 +239,7 @@ namespace SieveClient
                     panelClassfigy.Visible = false;
                     panelStatistics.Visible = true;
                     btnBeginBatchClassify.Enabled = true;
-                    textBoxClassfyGradeCnt.Text = totalCount.ToString();
+                    labelClassfyCnt.Text = totalCount.ToString();
                     textBoxClassifyStatistics.Text = resStr;
                     labelClassifyState.Text = TextRes.text["BatchClassifyEnd"];
                 });
@@ -230,7 +263,7 @@ namespace SieveClient
                     panelLearn.Visible = false;
                     panelLearnStatistics.Visible = true;
                     btnBeginBatchLearn.Enabled = true;
-                    textBoxLearnTotalCount.Text = totalCount.ToString();
+                    labelLearnTotoalCount.Text = totalCount.ToString();
                     textBoxLearnStatistics.Text = resStr;
                     labelLearnState.Text = TextRes.text["BatchLearnEnd"];
                 });
@@ -306,9 +339,8 @@ namespace SieveClient
             btnEndBatchClassify.Enabled = true;
             
             labelClassifyState.Text = TextRes.text["WaitSingleClassifyBegin"];
-            textBoxClassfyGradeCnt.Text = "";
             textBoxClassifyStatistics.Text = "";
-            textBoxClassifyCount.Text = "";
+            labelClassfyCnt.Text = "";
             textBoxClassfiyResult.Text = "";
             ClearClassifyPicBox();
 
@@ -334,16 +366,6 @@ namespace SieveClient
             byte[] ctrlMsg = new byte[1];
             ctrlMsg[0] = 0x01;
             ctrlClient.Send(ctrlMsg);
-
-            //TODO: just 4 test, to be deleted
-            /*
-            ThreadStart ts = new ThreadStart(delegate()
-            {
-                OnFValidatePosReqp(0, "https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo_top_ca79a146.png");
-            });
-            Thread th = new Thread(ts);
-            th.Start();
-            */
         }
 
         private void picBoxClassify_LoadComplete(object sender, AsyncCompletedEventArgs e)
@@ -372,10 +394,14 @@ namespace SieveClient
             if (curTabTag == "Classify")
             {
                 curState = State.ST_CLASS;
+                comboBoxLearn.SelectedIndex = -1;
+                labelLearnCnt.Text = "0";
             }
             else if (curTabTag == "Learn")
             {
                 curState = State.ST_LEARN;
+                labelClassCurGrade.Text = "";
+                labelClassfyCnt.Text = "0";
             }
         }
 
@@ -392,9 +418,9 @@ namespace SieveClient
             btnEndBatchLearn.Enabled = true;
 
             labelLearnState.Text = TextRes.text["WaitSingleLearnBegin"];
-            textBoxLearnTotalCount.Text = "";
+            labelLearnTotoalCount.Text = "";
             textBoxLearnStatistics.Text = "";
-            textBoxLearnCnt.Text = "";
+            labelLearnCnt.Text = "";
             textBoxLearnResult.Text = "";
             ClearLearnPicBox();
 
@@ -407,30 +433,6 @@ namespace SieveClient
             btnEndBatchLearn.Enabled = false;
             ClearLearnPicBox();
             SendEndBatchProcessPotocol((int)curState);
-
-            //TODO: to be deleted
-            /*
-            ThreadStart ts = new ThreadStart(delegate()
-            {
-                List<netmessage.LeafGradeCount> leaf_grade_counts = new List<netmessage.LeafGradeCount>(){
-                    new netmessage.LeafGradeCount
-                    {
-                        group = 1,
-                        rank = 2,
-                        count = 3,
-                    },
-                    new netmessage.LeafGradeCount
-                    {
-                        group = 2,
-                        rank = 3,
-                        count = 4,
-                    },
-                };
-                OnSEndBatchProcessRep(0, leaf_grade_counts);
-            });
-            Thread th = new Thread(ts);
-            th.Start();
-            */
         }
 
         private void btnLearn_Click(object sender, EventArgs e)
@@ -571,6 +573,11 @@ namespace SieveClient
                 picBoxClassify.ImageLocation = null;
                 picBoxClassify.Refresh();
             }
+        }
+
+        private void PrimaryForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
         }
     }
 }
